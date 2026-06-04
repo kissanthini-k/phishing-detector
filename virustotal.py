@@ -102,7 +102,7 @@ def _fetch_analysis_report(analysis_id: str, api_key: str) -> dict:
     """
     endpoint = f"{VT_API_BASE}/analyses/{analysis_id}"
 
-    max_retries = 4
+    max_retries = 6
     for attempt in range(max_retries):
         response = requests.get(endpoint, headers=_headers(api_key), timeout=15)
         response.raise_for_status()
@@ -114,7 +114,7 @@ def _fetch_analysis_report(analysis_id: str, api_key: str) -> dict:
         # Still queued or running — wait and retry
         if status in ("queued", "in-progress"):
             if attempt < max_retries - 1:
-                time.sleep(3)
+                time.sleep(5)
                 continue
             else:
                 return {
